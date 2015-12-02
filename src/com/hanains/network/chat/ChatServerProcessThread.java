@@ -3,9 +3,11 @@ package com.hanains.network.chat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ChatServerProcessThread extends Thread {
@@ -27,10 +29,8 @@ public class ChatServerProcessThread extends Thread {
 		
 		try {
 			//1. 스트림 얻기
-			bufferedReader = 
-					new BufferedReader( new InputStreamReader( socket.getInputStream(), "UTF-8" ) );
-			printWriter =
-					new PrintWriter( socket.getOutputStream() );
+			bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream(), StandardCharsets.UTF_8 ) );
+			printWriter = new PrintWriter( new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8 ), true );
 			
 			
 			//2. 리모트 호스트 정보 얻기

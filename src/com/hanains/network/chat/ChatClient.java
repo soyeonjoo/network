@@ -31,7 +31,7 @@ public class ChatClient {
 			socket.connect( new InetSocketAddress( SERVER_ADDRESS, SERVER_PORT ) );
 
 			// 4. reader/ writer 생성
-			bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream(), "UTF-8" ) );
+			bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream(), StandardCharsets.UTF_8 ) );
 			printWriter = new PrintWriter( new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8 ), true );
 
 			// 5. join 프로토콜
