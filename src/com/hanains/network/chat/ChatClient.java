@@ -21,6 +21,7 @@ public class ChatClient {
 		PrintWriter printWriter = null;
 		
 		try {
+			
 			// 1. 키보드 연결
 			scanner = new Scanner( System.in );
 
