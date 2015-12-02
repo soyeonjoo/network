@@ -2,7 +2,6 @@ package com.hanains.network.chat;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class ChatServer {
 
-	private static final int PORT = 50000;
+	private static final int PORT = 9090;
 	
 	public static void main(String[] args) {
 		ServerSocket serverSocket = null;

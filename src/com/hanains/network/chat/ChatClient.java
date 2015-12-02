@@ -3,19 +3,23 @@ package com.hanains.network.chat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class ChatClient {
-	private static final String SERVER_ADDRESS = "222.106.22.80";
-	private static final int SERVER_PORT = 50000;
+	private static final String SERVER_ADDRESS = "192.168.56.1";
+	private static final int SERVER_PORT = 9090;
 	
 	public static void main(String[] args) {
 		Scanner scanner = null;
 		Socket socket = null;
-
+		BufferedReader bufferedReader = null;
+		PrintWriter printWriter = null;
+		
 		try {
 			// 1. 키보드 연결
 			scanner = new Scanner( System.in );
@@ -27,10 +31,8 @@ public class ChatClient {
 			socket.connect( new InetSocketAddress( SERVER_ADDRESS, SERVER_PORT ) );
 
 			// 4. reader/ writer 생성
-			BufferedReader bufferedReader = 
-				new BufferedReader( new InputStreamReader(socket.getInputStream() ) );
-			PrintWriter printWriter = 
-				new PrintWriter(socket.getOutputStream());
+			bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream(), "UTF-8" ) );
+			printWriter = new PrintWriter( new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8 ), true );
 
 			// 5. join 프로토콜
 			System.out.print("닉네임>>");
@@ -57,19 +59,31 @@ public class ChatClient {
 				} else {
 					// 9. 메시지 처리
 					printWriter.println( "message:" + input );
+					// socket.getOutputStream().write( ("message:" + input + "\r\n").getBytes( "UTF-8" )  );
+					// socket.getOutputStream().flush();
 					printWriter.flush();
 				}
 			}
-
-			// 10. 자원정리
-			scanner.close();
-			bufferedReader.close();
-			printWriter.close();
-			if (socket.isClosed() == false) {
-				socket.close();
-			}
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			log("error:" + ex);
+		} finally {
+			// 10. 자원정리
+			try {
+				if( scanner != null ) {
+					scanner.close();
+				}
+				if( bufferedReader != null ) {
+					bufferedReader.close();
+				}
+				if( printWriter != null ) {
+					printWriter.close();
+				}
+				if( socket != null && socket.isClosed() == false) {
+					socket.close();
+				}
+			} catch( IOException ex ) {
+				log( "error:" + ex );
+			}
 		}
 	}
 
