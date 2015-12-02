@@ -1,8 +1,5 @@
 package com.hanains.network.thread;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DigitThread extends Thread {
 
 	
