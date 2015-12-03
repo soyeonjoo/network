@@ -34,8 +34,7 @@ public class ChatServerProcessThread extends Thread {
 			
 			
 			//2. 리모트 호스트 정보 얻기
-			InetSocketAddress inetSocketAddress = 
-					(InetSocketAddress)socket.getRemoteSocketAddress();
+			InetSocketAddress inetSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
 			String remoteHostAddress = inetSocketAddress.getHostName();
 			int remoteHostPort = inetSocketAddress.getPort();
 			ChatServer.log( "연결됨 from " + remoteHostAddress + ":" + remoteHostPort );
@@ -98,7 +97,7 @@ public class ChatServerProcessThread extends Thread {
 		String message = nickname + "님이 입장했습니다.";
 		broadcast( message );
 		
-		//3.
+		//3. Writer Pool 에 저장
 		addPrintWriter( printWriter );
 
 		//4. ack
