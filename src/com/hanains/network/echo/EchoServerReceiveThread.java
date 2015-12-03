@@ -3,9 +3,11 @@ package com.hanains.network.echo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class EchoServerReceiveThread extends Thread {
 	
@@ -30,8 +32,8 @@ public class EchoServerReceiveThread extends Thread {
 			EchoServer.consolLog( "연결됨 from " + remoteHostAddress + ":" + remoteHostPort );
 
 			//2. IOStream 받아오기
-			bufferedReader = new BufferedReader ( new InputStreamReader( socket.getInputStream() ) );
-			printWriter = new PrintWriter( socket.getOutputStream() );
+			bufferedReader = new BufferedReader ( new InputStreamReader( socket.getInputStream(), StandardCharsets.UTF_8 ) );
+			printWriter = new PrintWriter( new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8 ), true );
 		
 			//3. 데이터 읽기
 			while( true ) {
