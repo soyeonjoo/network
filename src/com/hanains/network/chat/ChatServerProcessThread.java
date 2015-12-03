@@ -28,18 +28,17 @@ public class ChatServerProcessThread extends Thread {
 		PrintWriter printWriter = null;
 		
 		try {
-			//1. 스트림 얻기
+			//스트림 얻기
 			bufferedReader = new BufferedReader( new InputStreamReader( socket.getInputStream(), StandardCharsets.UTF_8 ) );
 			printWriter = new PrintWriter( new OutputStreamWriter( socket.getOutputStream(), StandardCharsets.UTF_8 ), true );
 			
-			
-			//2. 리모트 호스트 정보 얻기
+			//리모트 호스트 정보 얻기
 			InetSocketAddress inetSocketAddress = (InetSocketAddress)socket.getRemoteSocketAddress();
 			String remoteHostAddress = inetSocketAddress.getHostName();
 			int remoteHostPort = inetSocketAddress.getPort();
 			ChatServer.log( "연결됨 from " + remoteHostAddress + ":" + remoteHostPort );
 			
-			//3.요청처리
+			//요청처리
 			while( true ) {
 				String request = bufferedReader.readLine();
 				if( request == null ) {
@@ -62,16 +61,21 @@ public class ChatServerProcessThread extends Thread {
 				
 			}
 			
-			//4.자원정리
-			bufferedReader.close();
-			printWriter.close();
-			if( socket.isClosed() == false ) {
-				socket.close();
-			}
 		} catch( IOException ex ) {
 			ChatServer.log( "error:" + ex );
 			// 클라이언트의 비정상 종료 ( 명시적으로 소켓을 닫지 않음 )
 			doQuit( printWriter );
+		} finally {
+			try {
+				//자원정리
+				bufferedReader.close();
+				printWriter.close();
+				if( socket.isClosed() == false ) {
+					socket.close();
+				}
+			} catch( IOException ex ) {
+				ChatServer.log( "error:" + ex );
+			}
 		}
 	}
 	
