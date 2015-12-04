@@ -1,4 +1,4 @@
-package TimeClient;
+package com.hanains.network.time;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
