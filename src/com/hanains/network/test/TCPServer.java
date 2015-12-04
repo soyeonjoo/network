@@ -19,13 +19,13 @@ public class TCPServer {
 			
 			// 1. 서버 소켓 생성
 			serverSocket = new ServerSocket();
+			serverSocket.setReuseAddress( true );
 			
 			// 2. 바인딩
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			String localhost = inetAddress.getHostAddress();
 			serverSocket.bind( new InetSocketAddress( localhost, PORT  ) );
 			System.out.println( "[서버] 바인딩 " + localhost + ":" + PORT );
-			
 			
 			//3. 연결 요청 대기( accept )
 			Socket socket = serverSocket.accept();

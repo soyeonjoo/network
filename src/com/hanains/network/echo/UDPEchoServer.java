@@ -1,8 +1,8 @@
 package com.hanains.network.echo;
 
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
 
 public class UDPEchoServer {
 
@@ -14,23 +14,28 @@ public class UDPEchoServer {
 		DatagramSocket datagramSocket = null;
 		
 		try {
+			//1. UDP 소켓 생성
 			datagramSocket = new DatagramSocket( PORT );
 			
-			while( true ) {
-				log( "packet 수신대기" );
-				DatagramPacket receivePacket = new DatagramPacket( new byte[ BUFFER_SIZE ], BUFFER_SIZE );
-				datagramSocket.receive( receivePacket );
+			//2. 수신 대기
+			log( "수신 대기" );
+			DatagramPacket receivePacket = new DatagramPacket( new byte[ BUFFER_SIZE], BUFFER_SIZE );
+			datagramSocket.receive( receivePacket );
 			
-				//3. 수신 데이터 출력
-				String message = new String( receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8" );
-				log( "packet 수신:" + message );
-				
-				// 4. 데이터 보내기
-				DatagramPacket sendPacket = new DatagramPacket( receivePacket.getData(), receivePacket.getLength(), receivePacket.getAddress(), receivePacket.getPort() );
-				datagramSocket.send( sendPacket );
-			}
+			//3. 데이터 확인
+			String data = new String( receivePacket.getData(), 0, receivePacket.getLength(), "UTF-8" );
+			log( "데이터 수신:" + data );
 			
-		} catch( IOException ex ) {
+			//4. 데이터 전송
+			DatagramPacket sendPacket
+				= new DatagramPacket(
+						receivePacket.getData(), 
+						receivePacket.getLength(),
+						receivePacket.getAddress(),
+						receivePacket.getPort() );
+			datagramSocket.send( sendPacket );
+			
+		} catch( Exception ex ) {
 			log( "error:" + ex );
 		} finally {
 			if( datagramSocket != null ) {
@@ -38,9 +43,8 @@ public class UDPEchoServer {
 			}
 		}
 	}
-	
-	public static void log( String log ) {
-		System.out.println( "[udp-echo-server] " + log );
-	}
 
+	public static void log( String message ) {
+		System.out.println( "[UDP Echo Server] " + message );
+	}
 }
